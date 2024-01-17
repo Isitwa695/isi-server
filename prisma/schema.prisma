@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Site {
+  id           Int      @id @default(autoincrement())
+  website      String   @db.VarChar(255)
+  websiteName  String   @db.VarChar(255)
+  photo        String?
+  category     String?
+  description  String?
+  other        String?
+  global_rank  String?
+  country      String?
+  country_rank String?
+  traffic      Int      @default(0)
+  crawl_date   String?
+  rank         String?
+  keywords     String?
+  traffic_cost String?
+  backlinks    String?
+  expires_on   String?
+  tags         String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now())
+  userId       Int      
+  user         User     @relation(fields: [userId], references: [id])
+}
+
+model User {
+  id             Int       @id @default(autoincrement())
+  email          String    @unique(map: "User_email_key")
+  fullName       String?
+  firstName      String?
+  lastName       String?
+  photo          String?
+  email_verified Boolean   @default(false)
+  role           user_role @default(USER)
+  password       String?   @db.VarChar(250)
+  createdAt      DateTime  @default(now())
+  sites          Site[]
+}
+
+enum user_role {
+  USER
+  ADMIN
+}
